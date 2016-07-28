@@ -43,7 +43,7 @@ class CrawlWebsites extends Command
 
         foreach ($websites as $website) {
             $this->info('Crawling :' . $website);
-            
+
             $this->dispatch(new Crawler($website));
         }
     }
@@ -52,11 +52,14 @@ class CrawlWebsites extends Command
      * Get all the sites we need to crawl.
      *
      * @return array
+     * @throws \Exception
      */
     protected function getWebsitesForCrawler()
     {
         if ($website = $this->option('website')) {
-            $this->websiteExists($website);
+            if (! $this->websiteExists($website)) {
+                throw new \Exception('Website is not valid! Try something else...');
+            }
 
             return [$website];
         }
